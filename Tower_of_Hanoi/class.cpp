@@ -2,58 +2,58 @@
 #include "header.h"
 #include "class.h"
 #include <iostream>
+#include <cstdio>
 using namespace std;
 
-Peg::Peg(char c) {
+Peg::Peg(char c, int i) {
 	head = NULL;
 	pegID = c;
+	cx = i; 
+	topY = 400;
 }
 
 //constructor 
-Peg::Peg(char c, int numDiscs) {
+Peg::Peg(char c, int pegX, int numDiscs) {
 	head = NULL;
 	pegID = c;
+	cx = pegX; 
+	topY = 400; 
 	//disc width 
 	int width = 50; 
 	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
-	ALLEGRO_COLOR blue = al_map_rgb(0, 0, 255);
-	Node* temp = new Node; 
+	ALLEGRO_COLOR blue = al_map_rgb(0, 255, 255);
 
-	for (int i = 0, x = 102.5, y = 400, r = 90; i < numDiscs; i++, y -= 20, r -= 10) {
+	
+	float x = 102.5, y = 400, r = 90;
+
+	for (int i = 0; i < numDiscs; i++) {
+		Node* temp = new Node;
 		ALLEGRO_COLOR colour = (i % 2) ? yellow : blue;
 		temp->ID = numDiscs - i;
 		temp->x = x;
 		temp->y = y;
 		temp->radius = r;
 		temp->colour = colour; 
+		//cout << "i = " << i << " " << "tempID: " << temp->ID << endl;
+
 		push(temp);
+
+		y -= 20;
+		r -= 10;
 	}
 }
 
-void Peg::push(Node *newnode) {
-
-	/*newnode->ID = source->ID;
-	newnode->x = source->x;
-	newnode->y = source->y;
-	newnode->radius = source->radius;
-	newnode->colour = source->colour;
-	newnode->next = head;
-	head = newnode;*/
-
+void Peg::push(Node* newnode) {
 	newnode->next = head;
 	head = newnode; 
+	topY -= 20;
 }
 
 Node * Peg::pop() {
 	Node* temp = head;
-	if (head != nullptr) {
-		head = head->next;
-
-		//cout << "TOP DISC: " << topDisc << endl;
-		return temp; 
-	}
-	else
-		cout << "ERROR" << endl;
+	head = head->next;
+	topY += 20;
+	return temp; 
 }
 
 Node* Peg::getHead() {

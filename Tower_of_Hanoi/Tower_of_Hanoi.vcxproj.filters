@@ -32,10 +32,16 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tower_of_Hanoi.cpp">
+    <ClCompile Include="class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="class.cpp">
+    <ClCompile Include="initiallization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hanoi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

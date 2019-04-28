@@ -80,6 +80,8 @@
     <Allegro_AddonMemfile>true</Allegro_AddonMemfile>
     <Allegro_AddonFont>true</Allegro_AddonFont>
     <Allegro_AddonColor>true</Allegro_AddonColor>
+    <Allegro_AddonPhysfs>true</Allegro_AddonPhysfs>
+    <Allegro_AddonDialog>true</Allegro_AddonDialog>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -186,13 +188,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="class.cpp" />
+    <ClCompile Include="display.cpp" />
+    <ClCompile Include="initiallization.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Tower_of_Hanoi.cpp" />
+    <ClCompile Include="hanoi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
