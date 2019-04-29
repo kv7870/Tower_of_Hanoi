@@ -27,7 +27,7 @@ int main() {
 	Peg B('B', 322.5);
 	Peg C('C', 542.5);
 
-	titleScreen(numDisc, choice, move, A, C, B, font, event_queue);
+	titleScreen(numDisc, choice, move, A, C, B, event_queue, font);
 
 	//initTower(numDisc);
 
@@ -35,7 +35,7 @@ int main() {
 
 	switch (choice) {
 	case 1:
-		levelFourMinus(numDisc, move, A, C, B, event_queue, font);
+		levelFourMinus(numDisc, choice, move, A, C, B, event_queue, font);
 		break;
 	case 2:
 		levelFour(numDisc, move, A, C, B, event_queue, font);
@@ -63,13 +63,34 @@ int main() {
 	return 0;
 }
 
-void levelFourMinus(int numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
-	hanoi(numDisc, move, A, C, B, event_queue, font);
+void levelFourMinus(int& numDisc, int& choice, int& move, Peg& A, Peg& C, Peg& B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
+	hanoi(numDisc, move, false, A, C, B, event_queue, font);
+
+	move = 0;
+	choice = 0; 
+
+	al_draw_filled_rounded_rectangle(480, 10, 560, 50, 10, 10, al_map_rgb(255, 255, 255));
+	al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), 485, 15, 0, "Menu");
+	al_flip_display();
+	system("pause");
+	C.printStack();
+	cout << endl;
+
+
+
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+	/*for (Node* curr = C.getHead(); curr; curr = curr->next) {
+		C.pop(1);
+		//cout << "ID: " << A.getHead()->ID << endl;
+	}
+	A.printStack();
+
+	titleScreen(numDisc, choice, move, A, C, B, event_queue, font);*/
 }
 
 void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-	draw(numDisc, move, A, C, B, font);
+	draw(numDisc, move, false, A, C, B, event_queue, font);
 	float mx = 0, my = 0;
 	bool done = false;
 
@@ -87,7 +108,7 @@ void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE*
 
 		if (refresh) {
 
-			draw(numDisc, move, A, C, B, font);
+			draw(numDisc, move, false, A, C, B, event_queue, font);
 
 			al_draw_textf(font[REGULAR], white, 5, 5, 0, "Discs: %d", numDisc);
 			al_draw_filled_rectangle(95, 10, 125, 40, white);
@@ -95,6 +116,13 @@ void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE*
 
 			al_draw_filled_triangle(100, 15, 120, 15, 110, 35, red);
 			al_draw_filled_triangle(140, 35, 160, 35, 150, 15, green);
+
+			al_draw_filled_rounded_rectangle(430, 10, 520, 50, 10, 10, white);
+			al_draw_text(font[REGULAR], black, 443, 15, 0, "Menu");
+
+			al_draw_filled_rounded_rectangle(540, 10, 630, 50, 10, 10, white);		
+			al_draw_text(font[REGULAR], black, 553, 15, 0, "Solve");
+
 
 			al_flip_display();
 
@@ -148,15 +176,22 @@ void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE*
 					}
 				}
 			}
+
+			if ((mx >= 540 && mx <= 630) && (my >= 10 && my <= 50)) {
+				done = true;
+				al_draw_filled_rounded_rectangle(540, 10, 630, 50, 10, 10, al_map_rgb(128,128,128));
+				al_draw_text(font[REGULAR], black, 550, 15, 0, "Solve");
+			}
+			
 		}
 
 
-
 	}
-	hanoi(numDisc, move, A, C, B, event_queue, font);
+	
+	hanoi(numDisc, move, true, A, C, B, event_queue, font);
 }
 
 void levelFourPlus(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
-	hanoi(numDisc, move, A, C, B, event_queue, font);
+	hanoi(numDisc, move, false, A, C, B, event_queue, font);
 }
 

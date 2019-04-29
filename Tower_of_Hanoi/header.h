@@ -21,11 +21,12 @@ void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_TIMER** timer, ALLEGRO_EVENT
 , ALLEGRO_FONT ** font);
 void initTower(int numDisc);
 
-void hanoi(int n, int &move, Peg& s, Peg& d, Peg& i, ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_FONT** font);
+void hanoi(int n, int &move, bool lvlFour, Peg& s, Peg& d, Peg& i, ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_FONT** font);
 void Move(int n, int &move, Peg& s, Peg& d);
-void draw(int numDisc, int &move, Peg s, Peg d, Peg i, ALLEGRO_FONT ** font);
-void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLEGRO_FONT** font,
-	ALLEGRO_EVENT_QUEUE* event_queue);
-void levelFourMinus(int numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
+void draw(int numDisc, int &move, bool lvlFour, Peg s, Peg d, Peg i, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT ** font);
+void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
+void levelFourMinus(int &numDisc, int &choice, int &move, Peg &A, Peg &C, Peg &B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
 void levelFour(int &numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
 void levelFourPlus(int &numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
+
+void walkthrough(int n, Peg s, Peg d, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);

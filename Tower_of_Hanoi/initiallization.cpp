@@ -44,7 +44,7 @@ void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_TIMER** timer, ALLEGRO_EVENT
 	*timer = al_create_timer(1.0 / FPS);
 	*event_queue = al_create_event_queue();
 
-	font[BOLD] = al_load_ttf_font("OpenSans-Bold.ttf", 20, 0);
+	font[BOLD] = al_load_ttf_font("OpenSans-Bold.ttf", 28, 0);
 	font[REGULAR] = al_load_ttf_font("OpenSans-Regular.ttf", 24, 0);
 
 

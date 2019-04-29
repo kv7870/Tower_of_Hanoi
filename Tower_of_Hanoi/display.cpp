@@ -12,24 +12,24 @@
 #include "class.h"
 using namespace std;
 
-void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLEGRO_FONT ** font,
-	ALLEGRO_EVENT_QUEUE * event_queue) {
+void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B,
+	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT ** font) {
 	ALLEGRO_COLOR bblue = al_map_rgb(137, 207, 240);
 	ALLEGRO_COLOR cyan = al_map_rgb(0, 255, 255);
 	ALLEGRO_COLOR white= al_map_rgb(255, 255, 255);
 	ALLEGRO_COLOR grey = al_map_rgb(128, 128, 128);
 	bool done = false;
 	float mx = 0, my = 0; 
-	draw(numDisc, move, A, C, B, font);
+	draw(numDisc, move, false, A, C, B, event_queue, font);
 	
 	al_draw_filled_rounded_rectangle(A.cx - 50, 90, A.cx + 50, 140, 10, 10, white);
-	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), A.cx-30, 100, 0, "Level 4-");
+	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), A.cx-30, 100, 0, "Lvl 4-");
 
 	al_draw_filled_rounded_rectangle(B.cx - 50, 90, B.cx + 50, 140, 10, 10, white);
-	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), B.cx - 30, 100, 0, "Level 4");
+	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), B.cx - 30, 100, 0, "Lvl 4");
 
 	al_draw_filled_rounded_rectangle(C.cx - 50, 90, C.cx + 50, 140, 10, 10, white);
-	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), C.cx - 30, 100, 0, "Level 4+");
+	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), C.cx - 30, 100, 0, "Lvl 4+");
 
 
 	while (!done) {
@@ -56,9 +56,9 @@ void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLE
 				choice = 1;
 				numDisc = 5;
 				al_draw_filled_rounded_rectangle(A.cx - 50, 90, A.cx + 50, 140, 10, 10, grey);
-				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), A.cx - 30, 100, 0, "Level 4-");
+				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), A.cx - 30, 100, 0, "Lvl 4-");
 				al_flip_display();
-				al_rest(0.2);
+				al_rest(0.1);
 			}
 
 			else if ((mx >= B.cx - 50 && mx <= B.cx + 50) && (my >= 90 && my <= 140)) {
@@ -66,18 +66,18 @@ void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLE
 				choice = 2;
 				numDisc = 5;
 				al_draw_filled_rounded_rectangle(B.cx - 50, 90, B.cx + 50, 140, 10, 10, grey);
-				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), B.cx - 30, 100, 0, "Level 4");
+				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), B.cx - 30, 100, 0, "Lvl 4");
 				al_flip_display();
-				al_rest(0.2);
+				al_rest(0.1);
 			}
 
 			else if ((mx >= C.cx - 50 && mx <= C.cx + 50) && (my >= 90 && my <= 140)) {
 				done = true;
 				choice = 3;
 				al_draw_filled_rounded_rectangle(C.cx - 50, 90, C.cx + 50, 140, 10, 10, grey);
-				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), C.cx - 30, 100, 0, "Level 4+");
+				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), C.cx - 30, 100, 0, "Lvl 4+");
 				al_flip_display();
-				al_rest(0.2);
+				al_rest(0.1);
 			}
 
 		}
@@ -89,9 +89,40 @@ void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLE
 }
 
 
+void walkthrough(int n, Peg s, Peg d, ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_FONT** font) {
+	bool done = false;
+	float mx = 0, my = 0;
+
+	al_draw_textf(font[REGULAR], al_map_rgb(255,255,255), 150, 75, 0, "Move disk %d from peg %c to peg %C", n, s.pegID, d.pegID);
+	al_draw_filled_rounded_rectangle(270, 125, 370, 175, 10, 10, al_map_rgb(255, 255, 255));
+	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), 285, 130, 0, "Next");
+
+	while (!done) {
+
+		al_flip_display();
+
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+
+		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+		{
+			if (ev.mouse.button & 1) {
+				mx = ev.mouse.x;
+				my = ev.mouse.y;
+			}
+			if (mx >= 270 && mx <= 370)
+				if (my >= 125 && my <= 175) {
+					done = true;
+					al_draw_filled_rounded_rectangle(270, 125, 370, 175, 10, 10, al_map_rgb(128, 128, 128));
+					al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), 285, 130, 0, "Next");
+				}
+		}
+	}
+}
+
 
 //draw pegs and all discs in current position
-void draw(int numDisc, int &move, Peg s, Peg d, Peg i, ALLEGRO_FONT ** font) {
+void draw(int numDisc, int &move, bool lvlFour, Peg s, Peg d, Peg i, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT ** font) {
 	ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
 	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
 
@@ -105,8 +136,8 @@ void draw(int numDisc, int &move, Peg s, Peg d, Peg i, ALLEGRO_FONT ** font) {
 
 
 
-	if (move > 0)
-		al_draw_textf(font[BOLD], white, 310, 10, 0, "Moves: %d", move);
+	//if (move > 0)
+		al_draw_textf(font[BOLD], white, 270, 5, 0, "Moves: %d", move);
 
 
 	//draw discs
@@ -133,6 +164,9 @@ void draw(int numDisc, int &move, Peg s, Peg d, Peg i, ALLEGRO_FONT ** font) {
 			al_draw_filled_rounded_rectangle(curr->x - curr->radius, curr->y, curr->x + curr->radius,
 				curr->y + 20, 10, 10, curr->colour);
 	}
+
+	if (lvlFour)
+		walkthrough(numDisc, s, d, event_queue, font);
 
 	//al_flip_display();
 	//al_rest(0.1);
