@@ -57,10 +57,11 @@ Node * Peg::pop(bool initial) {
 	topY += 20;
 	size--;
 
-	if (initial)
+	if (initial) {
 		delete temp;
+		temp = NULL;
+	}
 
-	temp = NULL;
 	return temp; 	
 }
 
