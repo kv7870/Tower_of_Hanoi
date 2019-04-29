@@ -10,6 +10,8 @@ Peg::Peg(char c, int i) {
 	pegID = c;
 	cx = i; 
 	size = 0;
+	
+	//top side
 	topY = 400;
 }
 

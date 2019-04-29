@@ -122,7 +122,7 @@ void walkthrough(int n, Peg s, Peg d, ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_
 
 
 //draw pegs and all discs in current position
-void draw(int numDisc, int &move, bool lvlFour, Peg s, Peg d, Peg i, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT ** font) {
+void draw(int numDisc, int &numMove, bool lvlFour, Peg s, Peg d, Peg i, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT ** font) {
 	ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
 	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
 
@@ -137,7 +137,7 @@ void draw(int numDisc, int &move, bool lvlFour, Peg s, Peg d, Peg i, ALLEGRO_EVE
 
 
 	//if (move > 0)
-		al_draw_textf(font[BOLD], white, 270, 5, 0, "Moves: %d", move);
+		al_draw_textf(font[BOLD], white, 270, 5, 0, "Moves: %d", numMove);
 
 
 	//draw discs

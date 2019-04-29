@@ -21,13 +21,13 @@ int main() {
 
 	int numDisc = 5;
 	int choice;
-	int move = 0;
+	int numMove = 0;
 
 	Peg A('A', 102.5, numDisc);
 	Peg B('B', 322.5);
 	Peg C('C', 542.5);
 
-	titleScreen(numDisc, choice, move, A, C, B, event_queue, font);
+	titleScreen(numDisc, choice, numMove, A, C, B, event_queue, font);
 
 	//initTower(numDisc);
 
@@ -35,13 +35,13 @@ int main() {
 
 	switch (choice) {
 	case 1:
-		levelFourMinus(numDisc, choice, move, A, C, B, event_queue, font);
+		levelFourMinus(numDisc, choice, numMove, A, C, B, event_queue, font);
 		break;
 	case 2:
-		levelFour(numDisc, move, A, C, B, event_queue, font);
+		levelFour(numDisc, numMove, A, C, B, event_queue, font);
 		break;
 	case 3:
-		levelFourPlus(numDisc, move, A, C, B, event_queue, font);
+		levelFourPlus(numDisc, numMove, A, C, B, event_queue, font);
 		break;
 	default:
 		cout << "Invalid choice";
@@ -63,10 +63,10 @@ int main() {
 	return 0;
 }
 
-void reset(int &numDisc, int &choice, int &move, Peg& A, Peg& C) {
+void reset(int &numDisc, int &choice, int &numMove, Peg& A, Peg& C) {
 	numDisc = 5;
 	choice = 0;
-	move = 0; 
+	numMove = 0; 
 
 	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
 	ALLEGRO_COLOR blue = al_map_rgb(0, 255, 255);
@@ -91,8 +91,8 @@ void reset(int &numDisc, int &choice, int &move, Peg& A, Peg& C) {
 	}
 }
 
-void levelFourMinus(int& numDisc, int& choice, int& move, Peg& A, Peg& C, Peg& B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
-	hanoi(numDisc, move, false, A, C, B, event_queue, font);
+void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
+	hanoi(numDisc, numMove, false, A, C, B, event_queue, font);
 
 	
 
@@ -101,7 +101,7 @@ void levelFourMinus(int& numDisc, int& choice, int& move, Peg& A, Peg& C, Peg& B
 	al_flip_display();
 	system("pause");
 	
-	reset(numDisc, choice, move, A, C);
+	reset(numDisc, choice, numMove, A, C);
 	C.printStack();
 	cout << endl;
 
@@ -109,12 +109,12 @@ void levelFourMinus(int& numDisc, int& choice, int& move, Peg& A, Peg& C, Peg& B
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
-	titleScreen(numDisc, choice, move, A, C, B, event_queue, font);
+	titleScreen(numDisc, choice, numMove, A, C, B, event_queue, font);
 }
 
-void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
+void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-	draw(numDisc, move, false, A, C, B, event_queue, font);
+	draw(numDisc, numMove, false, A, C, B, event_queue, font);
 	float mx = 0, my = 0;
 	bool done = false;
 
@@ -132,7 +132,7 @@ void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE*
 
 		if (refresh) {
 
-			draw(numDisc, move, false, A, C, B, event_queue, font);
+			draw(numDisc, numMove, false, A, C, B, event_queue, font);
 
 			al_draw_textf(font[REGULAR], white, 5, 5, 0, "Discs: %d", numDisc);
 			al_draw_filled_rectangle(95, 10, 125, 40, white);
@@ -212,10 +212,55 @@ void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE*
 
 	}
 	
-	hanoi(numDisc, move, true, A, C, B, event_queue, font);
+	hanoi(numDisc, numMove, true, A, C, B, event_queue, font);
 }
 
-void levelFourPlus(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
-	hanoi(numDisc, move, false, A, C, B, event_queue, font);
+void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
+	bool done = false;
+	bool refresh = true; 
+	float mx = 0, my = 0;
+
+	while (!done) {
+		draw(numDisc, numMove, false, A, C, B, event_queue, font); draw(numDisc, numMove, false, A, C, B, event_queue, font);
+
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			done = true;
+			exit(0);
+		}
+
+		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+		{
+			if (ev.mouse.button & 1) {
+				mx = ev.mouse.x;
+				my = ev.mouse.y;
+			}
+			
+			if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
+				if (my <= A.getHead()->y + 20 && my >= A.getHead()->y) {
+					al_draw_filled_rounded_rectangle(A.getHead()->x - A.getHead()->radius, A.getHead()->y, A.getHead()->x + A.getHead()->radius,
+						A.getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
+					refresh = true; 
+					//done = true; 
+				}
+			}
+		}
+
+		if (refresh) {
+			al_flip_display();
+			refresh = false;
+		}
+
+		
+
+	
+
+	}
+
+	
+
 }
 
