@@ -9,6 +9,7 @@ Peg::Peg(char c, int i) {
 	head = NULL;
 	pegID = c;
 	cx = i; 
+	size = 0;
 	topY = 400;
 }
 
@@ -17,6 +18,7 @@ Peg::Peg(char c, int pegX, int numDiscs) {
 	head = NULL;
 	pegID = c;
 	cx = pegX; 
+	size = 0; 
 	topY = 400; 
 	//disc width 
 	int width = 50; 
@@ -34,7 +36,6 @@ Peg::Peg(char c, int pegX, int numDiscs) {
 		temp->y = y;
 		temp->radius = r;
 		temp->colour = colour; 
-		//cout << "i = " << i << " " << "tempID: " << temp->ID << endl;
 
 		push(temp);
 
@@ -46,14 +47,21 @@ Peg::Peg(char c, int pegX, int numDiscs) {
 void Peg::push(Node* newnode) {
 	newnode->next = head;
 	head = newnode; 
+	size++; 
 	topY -= 20;
 }
 
-Node * Peg::pop() {
+Node * Peg::pop(bool initial) {
 	Node* temp = head;
 	head = head->next;
 	topY += 20;
-	return temp; 
+	size--;
+
+	if (initial)
+		delete temp;
+
+	temp = NULL;
+	return temp; 	
 }
 
 Node* Peg::getHead() {

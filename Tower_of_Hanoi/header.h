@@ -12,6 +12,7 @@
 #include <vector>
 const int numPeg = 3;
 const int pegHeight = 100;
+const int MAX_DISC= 8; 
 
 
 enum FONTS {BOLD, REGULAR};

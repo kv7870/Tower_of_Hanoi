@@ -17,13 +17,14 @@ public:
 	Peg(char, int, int);
 
 	void push(Node*);
-	Node * pop();
+	Node * pop(bool initial);
 	char pegID;
 	Node* getHead(); 
 	void printStack(); 
 
 	int cx; 
 	int topY; 
+	int size; 
 
 private:
 	Node* head;

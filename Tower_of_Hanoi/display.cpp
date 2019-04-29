@@ -64,7 +64,7 @@ void titleScreen(int &numDisc, int &choice, int &move, Peg A, Peg C, Peg B, ALLE
 			else if ((mx >= B.cx - 50 && mx <= B.cx + 50) && (my >= 90 && my <= 140)) {
 				done = true;
 				choice = 2;
-				numDisc = 3;
+				numDisc = 5;
 				al_draw_filled_rounded_rectangle(B.cx - 50, 90, B.cx + 50, 140, 10, 10, grey);
 				al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), B.cx - 30, 100, 0, "Level 4");
 				al_flip_display();
@@ -118,6 +118,7 @@ void draw(int numDisc, int &move, Peg s, Peg d, Peg i, ALLEGRO_FONT ** font) {
 			al_draw_filled_rounded_rectangle(curr->x - curr->radius, curr->y, curr->x + curr->radius,
 				curr->y + 20, 10, 10, curr->colour);
 		}
+		cout << endl; 
 	}
 
 	if (d.getHead() != NULL) {
@@ -133,7 +134,7 @@ void draw(int numDisc, int &move, Peg s, Peg d, Peg i, ALLEGRO_FONT ** font) {
 				curr->y + 20, 10, 10, curr->colour);
 	}
 
-	al_flip_display();
-	al_rest(0.1);
+	//al_flip_display();
+	//al_rest(0.1);
 
-}
+} 
