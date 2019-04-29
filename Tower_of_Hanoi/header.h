@@ -30,3 +30,4 @@ void levelFour(int &numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE*
 void levelFourPlus(int &numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
 
 void walkthrough(int n, Peg s, Peg d, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
+void reset(int& numDisc, int& choice, int& move, Peg& A, Peg& C);

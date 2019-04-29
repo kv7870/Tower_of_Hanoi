@@ -63,29 +63,53 @@ int main() {
 	return 0;
 }
 
+void reset(int &numDisc, int &choice, int &move, Peg& A, Peg& C) {
+	numDisc = 5;
+	choice = 0;
+	move = 0; 
+
+	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
+	ALLEGRO_COLOR blue = al_map_rgb(0, 255, 255);
+
+	for (Node* curr = C.getHead(); curr; curr = curr->next)
+		C.pop(0);
+
+	float x = 102.5, y = 400, r = 90;
+	for (int i = 0; i < numDisc; i++) {
+		Node* temp = new Node;
+		ALLEGRO_COLOR colour = (i % 2) ? yellow : blue;
+		temp->ID = numDisc - i;
+		temp->x = x;
+		temp->y = y;
+		temp->radius = r;
+		temp->colour = colour;
+
+		A.push(temp);
+
+		y -= 20;
+		r -= 10;
+	}
+}
+
 void levelFourMinus(int& numDisc, int& choice, int& move, Peg& A, Peg& C, Peg& B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	hanoi(numDisc, move, false, A, C, B, event_queue, font);
 
-	move = 0;
-	choice = 0; 
+	
 
 	al_draw_filled_rounded_rectangle(480, 10, 560, 50, 10, 10, al_map_rgb(255, 255, 255));
 	al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), 485, 15, 0, "Menu");
 	al_flip_display();
 	system("pause");
+	
+	reset(numDisc, choice, move, A, C);
 	C.printStack();
 	cout << endl;
 
 
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
-	/*for (Node* curr = C.getHead(); curr; curr = curr->next) {
-		C.pop(1);
-		//cout << "ID: " << A.getHead()->ID << endl;
-	}
-	A.printStack();
 
-	titleScreen(numDisc, choice, move, A, C, B, event_queue, font);*/
+	titleScreen(numDisc, choice, move, A, C, B, event_queue, font);
 }
 
 void levelFour(int& numDisc, int move, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
