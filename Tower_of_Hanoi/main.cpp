@@ -223,7 +223,9 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 	Peg* s = NULL, * d = NULL; 
 
 	while (!done) {
-		draw(numDisc, numMove, false, A, C, B, event_queue, font); draw(numDisc, numMove, false, A, C, B, event_queue, font);
+		if (refresh) {
+			draw(numDisc, numMove, false, A, C, B, event_queue, font);
+		}
 
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -239,89 +241,100 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 			if (ev.mouse.button & 1) {
 				mx = ev.mouse.x;
 				my = ev.mouse.y;
-				cout << "HI";
-			}
 
-			getSelectedDisc(mx, my, s, A, C, B);
-
-			if (s != NULL) {
-				al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y, s->getHead()->x + s->getHead()->radius,
-					s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
-				refresh = true;
-				selected = true;
-			}
-			else {
-				mx = 0;
-				my = 0;
-			}
-		}
-
-		if (selected) { 
-			if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-				if (ev.mouse.button & 1) {  
-					mx = ev.mouse.x;
-					my = ev.mouse.y;
-
-					if (chkValidMove(mx, my, A, C, B, s, d)) {
+				if (selected) {
+					if (chkValidMove(mx, my, A, C, B, s, &d)) {
+						cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
 						Move(numDisc, numMove, *s, *d);
-						//cout << "HI";
+						selected = false;
+						s = NULL;
+						d = NULL;
 					}
 				}
+
+				if (getSelectedDisc(mx, my, &s, A, C, B)) {
+					al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y, s->getHead()->x + s->getHead()->radius,
+						s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
+					refresh = true;
+					selected = true;
+				}
+				else {
+					mx = 0;
+					my = 0;
+				}
+			}
 		}
 
 		if (refresh) { 
 			al_flip_display(); 
 			refresh = false; 
-			s = NULL; 
-			d = NULL; 
+		}
+
+		cout << "Selected: " << selected << endl;
+		cout << "s: " << s << endl; 
+		//system("pause");
+	}
+}
+
+bool getSelectedDisc(float mx, float my, Peg **s, Peg &A, Peg &C, Peg &B) {
+	if (A.getHead()) 
+		if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
+			if (my <= A.getHead()->y + 20 && my >= A.getHead()->y) {
+				*s = &A;
+				//system("pause");
+				return true;
+			}
+	}
+
+	if (B.getHead()) {
+		if (mx >= B.cx - B.getHead()->radius && mx <= B.cx + B.getHead()->radius) {
+			if (my <= B.getHead()->y + 20 && my >= B.getHead()->y)
+				if (B.getHead()) {
+					*s = &B;
+					return true;
+				}
 		}
 	}
-}
 
-void getSelectedDisc(float mx, float my, Peg *s, Peg A, Peg C, Peg B) {
-	if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
-		if (my <= A.getHead()->y + 20 && my >= A.getHead()->y)
-			s = &A; 
+	if(C.getHead()) {
+		if (mx >= C.cx - C.getHead()->radius && mx <= C.cx + C.getHead()->radius) {
+			if (my <= C.getHead()->y + 20 && my >= C.getHead()->y)
+				if (C.getHead()) {
+					*s = &C;
+					return true;
+				}
+		}
 	}
 
-	else if (mx >= B.cx - B.getHead()->radius && mx <= B.cx + B.getHead()->radius) {
-		if (my <= B.getHead()->y + 20 && my >= B.getHead()->y) 
-			s = &B;
-	}
-
-	else if (mx >= C.cx - C.getHead()->radius && mx <= C.cx + C.getHead()->radius) {
-		if (my <= C.getHead()->y + 20 && my >= C.getHead()->y)
-			s = &C;
-	}
+	return false; 
 }
 
 
-bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg *s, Peg *d) {
+bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg *s, Peg **d) {
 	/*for (int i = 0, x = 100, y = 425; i < 3; i++, x += 220) {
 		al_draw_filled_rectangle(x, y, x + 5, y - 185, white);
 		al_draw_filled_rectangle((x + 2.5) - 95, y - 5, (x + 2.5) + 95, y, white);*/
 
 		if (my <= 425 && my >= 240) {                    
-			//not same peg                   
-			if (mx<s->cx - 2.5 || mx>s->cx + 2.5) {  
-
+			//verify destination != source                  
+			if (mx < s->cx - 2.5 || mx > s->cx + 2.5) {  
 				if (mx >= 100 && mx <= 105) {
-					if (A.getHead()->ID > s->getHead()->ID) {  
-						d = &A;    
+					if(A.getHead()==NULL || A.getHead()->ID > s->getHead()->ID) {  
+						*d = &A;    
 						return true; 
 					}
 				}
 
 				else if (mx >= 320 && mx <= 325) { 
-					if (B.getHead()->ID > s->getHead()->ID) { 
-						d = &B;     
+					if (B.getHead() == NULL || B.getHead()->ID > s->getHead()->ID) {
+						*d = &B;     
 						return true;  
 					}
 				}
 
 				else if (mx >= 540 && mx <= 545) {   
-					if (C.getHead()->ID > s->getHead()->ID) {  
-						d = &C;                
+					if (C.getHead() == NULL||C.getHead()->ID > s->getHead()->ID) {
+						*d = &C;                
 						return true;     
 					}
 				}

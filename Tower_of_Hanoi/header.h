@@ -31,5 +31,5 @@ void levelFourPlus(int &numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 
 void walkthrough(int n, Peg s, Peg d, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
 void reset(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C);
-void getSelectedDisc(float mx, float my, Peg *s, Peg A, Peg C, Peg B); 
-bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg* s, Peg* d); 
+bool getSelectedDisc(float mx, float my, Peg **s, Peg &A, Peg &C, Peg &B); 
+bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg* s, Peg** d); 
