@@ -236,8 +236,8 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 
 		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
-			if (ev.mouse.button & 1) {
-				mx = ev.mouse.x;
+			if (ev.mouse.button & 1) { 
+				mx = ev.mouse.x; 
 				my = ev.mouse.y;
 			}
 
@@ -246,26 +246,27 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 			if (s != NULL) {
 				al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y, s->getHead()->x + s->getHead()->radius,
 					s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
-				refresh = true;
+				refresh = true; 
 				selected = true; 
 			}
 		}
 
-		if (selected) {
+		if (selected) { 
 			if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-				if (ev.mouse.button & 1) {
+				if (ev.mouse.button & 1) {  
 					mx = ev.mouse.x;
 					my = ev.mouse.y;
 
-					if (chkValidMove(mx, my, A, C, B, s, d))
+					if (chkValidMove(mx, my, A, C, B, s, d)) {
 						Move(numDisc, numMove, *s, *d);
+						//cout << "HI";
+					}
 				}
-
 		}
 
-		if (refresh) {
-			al_flip_display();
-			refresh = false;
+		if (refresh) { 
+			al_flip_display(); 
+			refresh = false; 
 			s = NULL; 
 			d = NULL; 
 		}
@@ -295,30 +296,28 @@ bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg *s, Peg *d) {
 		al_draw_filled_rectangle(x, y, x + 5, y - 185, white);
 		al_draw_filled_rectangle((x + 2.5) - 95, y - 5, (x + 2.5) + 95, y, white);*/
 
-
-		
-		if (my <= 425 && my >= 240) {
-			//not same peg
-			if (mx<s->cx - 2.5 || mx>s->cx + 2.5) {
+		if (my <= 425 && my >= 240) {                    
+			//not same peg                   
+			if (mx<s->cx - 2.5 || mx>s->cx + 2.5) {  
 
 				if (mx >= 100 && mx <= 105) {
-					if (A.getHead()->ID > s->getHead()->ID) {
-						d = &A;
-						return true;
+					if (A.getHead()->ID > s->getHead()->ID) {  
+						d = &A;    
+						return true; 
 					}
 				}
 
-				else if (mx >= 320 && mx <= 325) {
-					if (B.getHead()->ID > s->getHead()->ID) {
-						d = &B;
-						return true;
+				else if (mx >= 320 && mx <= 325) { 
+					if (B.getHead()->ID > s->getHead()->ID) { 
+						d = &B;     
+						return true; 
 					}
 				}
 
-				else if (420, 425) {
-					if (C.getHead()->ID > s->getHead()->ID) {
-						d = &C;
-						return true;
+				else if (mx >= 540 && mx <= 545) {   
+					if (C.getHead()->ID > s->getHead()->ID) {  
+						d = &C;                
+						return true;     
 					}
 				}
 			}
