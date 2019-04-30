@@ -236,9 +236,10 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 
 		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
-			if (ev.mouse.button & 1) { 
-				mx = ev.mouse.x; 
+			if (ev.mouse.button & 1) {
+				mx = ev.mouse.x;
 				my = ev.mouse.y;
+				cout << "HI";
 			}
 
 			getSelectedDisc(mx, my, s, A, C, B);
@@ -246,8 +247,12 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 			if (s != NULL) {
 				al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y, s->getHead()->x + s->getHead()->radius,
 					s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
-				refresh = true; 
-				selected = true; 
+				refresh = true;
+				selected = true;
+			}
+			else {
+				mx = 0;
+				my = 0;
 			}
 		}
 
