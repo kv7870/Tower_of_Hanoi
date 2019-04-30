@@ -310,7 +310,7 @@ bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg *s, Peg *d) {
 				else if (mx >= 320 && mx <= 325) { 
 					if (B.getHead()->ID > s->getHead()->ID) { 
 						d = &B;     
-						return true; 
+						return true;  
 					}
 				}
 
