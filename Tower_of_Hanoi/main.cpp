@@ -285,7 +285,7 @@ void getSelectedDisc(float mx, float my, Peg *s, Peg A, Peg C, Peg B) {
 	}
 
 	else if (mx >= B.cx - B.getHead()->radius && mx <= B.cx + B.getHead()->radius) {
-		if (my <= B.getHead()->y + 20 && my >= B.getHead()->y)
+		if (my <= B.getHead()->y + 20 && my >= B.getHead()->y) 
 			s = &B;
 	}
 
