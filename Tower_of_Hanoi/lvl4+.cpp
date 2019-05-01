@@ -47,7 +47,9 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 						//cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
 						//system("pause"); 
 						Move(numDisc, numMove, *s, *d);
-						d->printStack();
+						A.printStack();
+						B.printStack();
+						C.printStack(); 
 						refresh = true;
 						selected = false;
 						s = NULL;
@@ -83,13 +85,17 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 	}
 
 	//wait for user to close window
+	draw(numDisc, numMove, false, A, C, B, event_queue, font);
 	finishScreen(event_queue, font);
 }
 
 bool chkSolved(int numDisc, Peg& C) {
 	if (C.getHead()) {
-		if (C.getHead()->ID == numDisc)
+		if (C.size == numDisc) {
+			cout <<"C TOP: "<< C.getHead()->ID << endl; 
+			cout << "numDisc: " << numDisc << endl;
 			return true;
+		}
 	}
 	return false;
 }

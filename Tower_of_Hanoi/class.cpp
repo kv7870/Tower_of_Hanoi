@@ -74,9 +74,10 @@ Node* Peg::getHead() {
 
 void Peg::printStack() {
 	Node* curr;
-	cout << "Peg " << pegID << ": " << endl;
+	cout << "Peg " << pegID << ": "; 
 
 	for (curr = head; curr; curr = curr->next)
 		cout << curr->ID << " ";
+	cout << endl; 
 
 }

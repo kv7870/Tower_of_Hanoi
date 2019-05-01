@@ -165,12 +165,11 @@ void changeNumDisc(int& numDisc, int numMove, Peg& A, Peg& C, Peg& B,
 						newnode->ID = 1;
 
 						//shift ID of other discs
-						for (Node* curr = A.getHead()->next; curr; curr = curr->next) {
+						for (Node* curr = A.getHead(); curr; curr = curr->next) {
 							(curr->ID)++;
 						}
 						Node* curr = A.getHead();
 						curr = curr->next; 
-						cout << "A.TOP()->next: " << curr->ID << endl; 
 						A.push(newnode);
 						refresh = true;
 					}
