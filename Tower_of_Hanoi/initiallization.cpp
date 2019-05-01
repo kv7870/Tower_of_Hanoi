@@ -1,3 +1,4 @@
+//initialization.cpp
 #include "stdafx.h"
 #include "header.h"
 #include <allegro5/allegro.h>
@@ -10,9 +11,9 @@ const int SCREEN_W = 640;
 const int SCREEN_H = 480;
 
 //initialize Allegro 
-void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_EVENT_QUEUE** event_queue, 
-	ALLEGRO_FONT ** font) {
-	
+void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_EVENT_QUEUE** event_queue,
+	ALLEGRO_FONT** font) {
+
 	//initialization 
 	if (!al_init())
 		al_show_native_message_box(NULL, "Error", NULL, "Could not initialize Allegro", NULL, NULL);
@@ -31,7 +32,7 @@ void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_EVENT_QUEUE** event_queue,
 
 	//create 
 	*display = al_create_display(SCREEN_W, SCREEN_H);
-	if(!display)
+	if (!display)
 		al_show_native_message_box(NULL, "Error", NULL, "Could not create display", NULL, NULL);
 
 	*event_queue = al_create_event_queue();
@@ -46,3 +47,4 @@ void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_EVENT_QUEUE** event_queue,
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 }
+

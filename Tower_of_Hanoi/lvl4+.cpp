@@ -1,3 +1,4 @@
+//lvl4+.cpp
 #include "stdafx.h"
 #include <iostream>
 #include <allegro5/allegro.h>
@@ -46,8 +47,8 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 						//cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
 						//system("pause"); 
 						Move(numDisc, numMove, *s, *d);
-						d->printStack(); 
-						refresh = true; 
+						d->printStack();
+						refresh = true;
 						selected = false;
 						s = NULL;
 						d = NULL;
@@ -76,9 +77,9 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 			al_flip_display();
 			refresh = false;
 		}
-		
+
 		if (chkSolved(numDisc, C))
-			done = true; 
+			done = true;
 	}
 
 	//wait for user to close window
@@ -90,10 +91,10 @@ bool chkSolved(int numDisc, Peg& C) {
 		if (C.getHead()->ID == numDisc)
 			return true;
 	}
-	return false; 
+	return false;
 }
 
-void drawOptions(Peg* s, Peg &A, Peg &C, Peg &B, ALLEGRO_FONT** font) {
+void drawOptions(Peg * s, Peg & A, Peg & C, Peg & B, ALLEGRO_FONT * *font) {
 	if (s->pegID != A.pegID) {
 		if (!(A.getHead()) || A.getHead()->radius > s->getHead()->radius) {
 			al_draw_filled_rounded_rectangle(A.cx - 50, 100, A.cx + 50, 150, 10, 10, al_map_rgb(0, 255, 0));
@@ -119,7 +120,7 @@ void drawOptions(Peg* s, Peg &A, Peg &C, Peg &B, ALLEGRO_FONT** font) {
 	}
 }
 
-bool selectDisc(float mx, float my, Peg** s, Peg& A, Peg& C, Peg& B) {
+bool selectDisc(float mx, float my, Peg * *s, Peg & A, Peg & C, Peg & B) {
 	if (A.getHead())
 		if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
 			if (my <= A.getHead()->y + 20 && my >= A.getHead()->y) {
@@ -152,7 +153,7 @@ bool selectDisc(float mx, float my, Peg** s, Peg& A, Peg& C, Peg& B) {
 }
 
 
-bool chkValidMove(float mx, float my, Peg &A, Peg &C, Peg &B, Peg* s, Peg** d) {
+bool chkValidMove(float mx, float my, Peg & A, Peg & C, Peg & B, Peg * s, Peg * *d) {
 
 	if (my <= 150 && my >= 100) {
 		if (mx >= A.cx - 50 && mx <= A.cx + 50) {
@@ -187,6 +188,3 @@ bool chkValidMove(float mx, float my, Peg &A, Peg &C, Peg &B, Peg* s, Peg** d) {
 
 	return false;
 }
-
-
-

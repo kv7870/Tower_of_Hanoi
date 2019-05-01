@@ -1,3 +1,4 @@
+//main.cpp
 #include "stdafx.h"
 #include <iostream>
 #include <allegro5/allegro.h>
@@ -50,19 +51,17 @@ int main() {
 
 
 //level 4 minus requirement: computer solves in fewest moves using recursion 
-void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B, 
+void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B,
 	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	hanoi(numDisc, numMove, false, A, C, B, event_queue, font);
 
 	//wait for user to close window
-	finishScreen(event_queue, font); 
+	finishScreen(event_queue, font);
 }
 
 //level 4 requirement: clickable walkthrough using recursion 
-void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, 
+void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue,
 	ALLEGRO_FONT** font) {
-	//al_clear_to_color(al_map_rgb(0, 0, 0));
-	//draw(numDisc, numMove, false, A, C, B, event_queue, font);
 
 	float mx = 0, my = 0;
 	bool done = false;
@@ -74,9 +73,10 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 	ALLEGRO_COLOR cyan = al_map_rgb(0, 255, 255);
 	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
 	bool refresh = true;
-	bool initial = true; 
+	bool initial = true;
 
 	changeNumDisc(numDisc, numMove, A, C, B, event_queue, font);
+	cout << "NUMDISC: " << numDisc << endl; 
 
 	//solve recursively but one step at a time 
 	hanoi(numDisc, numMove, true, A, C, B, event_queue, font);
@@ -97,14 +97,14 @@ void changeNumDisc(int& numDisc, int numMove, Peg& A, Peg& C, Peg& B,
 	ALLEGRO_COLOR green = al_map_rgb(0, 255, 0);
 	ALLEGRO_COLOR cyan = al_map_rgb(0, 255, 255);
 	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
-	bool done = false; 
+	bool done = false;
 	bool refresh = true;
 	bool initial = true;
 	float mx = 0, my = 0;
 
 	while (!done) {
 
-		//update display if user changes # of disks 
+		//update display if user adjusts the # of disks 
 		if (refresh) {
 			draw(numDisc, numMove, false, A, C, B, event_queue, font);
 

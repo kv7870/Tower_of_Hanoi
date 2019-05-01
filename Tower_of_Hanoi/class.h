@@ -1,3 +1,4 @@
+//class.h
 #pragma once
 
 struct Node {
@@ -22,21 +23,19 @@ public:
 	//push disc to peg stack
 	void push(Node*);
 	//pop top disc; if mainMenu is true, user can decrease # of discs, which requires delete operator 
-	Node * pop(bool mainMenu);
+	Node* pop(bool mainMenu);
 	//A, B, C
 	char pegID;
-	Node* getHead(); 
-	void printStack(); 
-	
+	Node* getHead();
+	void printStack();
+
 	//x-coordinate of peg's centre
-	int cx; 
+	int cx;
 	//y-coordinate of top edge of the topmost disc
-	int topY; 
+	int topY;
 	//number of discs on the peg
-	int size; 
+	int size;
 
 private:
 	Node* head;
 };
-
-
