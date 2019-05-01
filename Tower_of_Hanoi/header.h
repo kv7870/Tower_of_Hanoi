@@ -24,7 +24,7 @@ void hanoi(int n, int& move, bool lvlFour, Peg& s, Peg& d, Peg& i, ALLEGRO_EVENT
 void Move(int n, int& numMove, Peg& s, Peg& d);
 void draw(int numDisc, int& numMove, bool lvlFour, Peg s, Peg d, Peg i,
 	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
-void titleScreen(int& numDisc, int& choice, int& numMove, Peg A, Peg C, Peg B,
+void titleScreen(int numDisc, int& choice, int& numMove, Peg A, Peg C, Peg B,
 	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);
 void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B,
 	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font);

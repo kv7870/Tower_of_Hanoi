@@ -75,9 +75,10 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 	bool refresh = true;
 	bool initial = true;
 
-	changeNumDisc(numDisc, numMove, A, C, B, event_queue, font);
-	cout << "NUMDISC: " << numDisc << endl; 
+	cout << "NUMDISC: " << numDisc << endl;
 
+	changeNumDisc(numDisc, numMove, A, C, B, event_queue, font);
+	
 	//solve recursively but one step at a time 
 	hanoi(numDisc, numMove, true, A, C, B, event_queue, font);
 
@@ -135,22 +136,22 @@ void changeNumDisc(int& numDisc, int numMove, Peg& A, Peg& C, Peg& B,
 			}
 
 			if (my >= 10 && my <= 40) {
-				//user clicks button that decreases # of discs 
+				//user clicks button to decrease # of discs 
 				if (mx >= 95 && mx <= 125) {
 					if (numDisc > 1) {
 						numDisc--;
-
-						A.pop(initial);
 
 						//shift ID of other discs 
 						for (Node* curr = A.getHead()->next; curr; curr = curr->next) {
 							(curr->ID)--;
 						}
-						refresh = true;
+
+						A.pop(initial);
+						refresh = true; 
 					}
 
 				}
-				//user clicks button that increases # of discs 
+				//user clicks button to increase # of discs 
 				else if (mx >= 135 && mx <= 165) {
 					if (numDisc < MAX_DISC) {
 						numDisc++;
@@ -167,6 +168,9 @@ void changeNumDisc(int& numDisc, int numMove, Peg& A, Peg& C, Peg& B,
 						for (Node* curr = A.getHead()->next; curr; curr = curr->next) {
 							(curr->ID)++;
 						}
+						Node* curr = A.getHead();
+						curr = curr->next; 
+						cout << "A.TOP()->next: " << curr->ID << endl; 
 						A.push(newnode);
 						refresh = true;
 					}

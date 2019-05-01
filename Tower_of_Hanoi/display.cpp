@@ -12,7 +12,7 @@
 using namespace std;
 
 //title screen with 3 options displayed  
-void titleScreen(int& numDisc, int& choice, int& move, Peg A, Peg C, Peg B,
+void titleScreen(int numDisc, int& choice, int& move, Peg A, Peg C, Peg B,
 	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	//colours 
 	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
