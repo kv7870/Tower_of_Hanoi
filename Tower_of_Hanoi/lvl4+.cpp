@@ -6,8 +6,6 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_acodec.h>
 #include "header.h"
 #include "class.h"
 using namespace std;
@@ -20,9 +18,13 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 	bool selected = false;
 	Peg* s = NULL, * d = NULL;
 
+	//let user adjust the # of discs 
+	changeNumDisc(numDisc, numMove, A, C, B, event_queue, font);
+
 	while (!done) {
 		if (refresh) {
 			draw(numDisc, numMove, false, A, C, B, event_queue, font);
+			al_draw_text(font[BOLD], al_map_rgb(255, 255, 255), 105, 100, 0, "Click the disk you wish to move");
 		}
 
 		ALLEGRO_EVENT ev;
@@ -43,14 +45,19 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 					if (chkValidMove(mx, my, A, C, B, s, &d)) {
 						//cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
 						//system("pause"); 
-						Move(numDisc, numMove, *s, *d); 
+						Move(numDisc, numMove, *s, *d);
+						d->printStack(); 
+						refresh = true; 
 						selected = false;
 						s = NULL;
 						d = NULL;
+						continue;
 					}
 				}
 
-				if (getSelectedDisc(mx, my, &s, A, C, B)) {
+				if (selectDisc(mx, my, &s, A, C, B)) {
+					draw(numDisc, numMove, false, A, C, B, event_queue, font);
+
 					al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y,
 						s->getHead()->x + s->getHead()->radius, s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
 
@@ -69,14 +76,29 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 			al_flip_display();
 			refresh = false;
 		}
+		
+		if (chkSolved(numDisc, C))
+			done = true; 
 	}
+
+	//wait for user to close window
+	finishScreen(event_queue, font);
 }
 
-void drawOptions(Peg* s, Peg A, Peg C, Peg B, ALLEGRO_FONT** font) {
+bool chkSolved(int numDisc, Peg& C) {
+	if (C.getHead()) {
+		if (C.getHead()->ID == numDisc)
+			return true;
+	}
+	return false; 
+}
+
+void drawOptions(Peg* s, Peg &A, Peg &C, Peg &B, ALLEGRO_FONT** font) {
 	if (s->pegID != A.pegID) {
 		if (!(A.getHead()) || A.getHead()->radius > s->getHead()->radius) {
-			al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), B.cx - 30, 95, 0, "Move");
-			al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), B.cx - 25, 120, 0, "here");
+			al_draw_filled_rounded_rectangle(A.cx - 50, 100, A.cx + 50, 150, 10, 10, al_map_rgb(0, 255, 0));
+			al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), A.cx - 30, 95, 0, "Move");
+			al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), A.cx - 25, 120, 0, "here");
 		}
 	}
 
@@ -97,7 +119,7 @@ void drawOptions(Peg* s, Peg A, Peg C, Peg B, ALLEGRO_FONT** font) {
 	}
 }
 
-bool getSelectedDisc(float mx, float my, Peg** s, Peg& A, Peg& C, Peg& B) {
+bool selectDisc(float mx, float my, Peg** s, Peg& A, Peg& C, Peg& B) {
 	if (A.getHead())
 		if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
 			if (my <= A.getHead()->y + 20 && my >= A.getHead()->y) {
@@ -130,14 +152,11 @@ bool getSelectedDisc(float mx, float my, Peg** s, Peg& A, Peg& C, Peg& B) {
 }
 
 
-bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg* s, Peg** d) {
-	/*for (int i = 0, x = 100, y = 425; i < 3; i++, x += 220) {
-		al_draw_filled_rectangle(x, y, x + 5, y - 185, white);
-		al_draw_filled_rectangle((x + 2.5) - 95, y - 5, (x + 2.5) + 95, y, white);*/
+bool chkValidMove(float mx, float my, Peg &A, Peg &C, Peg &B, Peg* s, Peg** d) {
 
 	if (my <= 150 && my >= 100) {
-		//verify destination != source   
 		if (mx >= A.cx - 50 && mx <= A.cx + 50) {
+			//verify that destination != source   
 			if (s->pegID != A.pegID) {
 				if (A.getHead() == NULL || A.getHead()->ID > s->getHead()->ID) {
 					*d = &A;
@@ -168,4 +187,6 @@ bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg* s, Peg** d) {
 
 	return false;
 }
+
+
 

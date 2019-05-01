@@ -21,10 +21,7 @@ void initAllegro(ALLEGRO_DISPLAY** display, ALLEGRO_EVENT_QUEUE** event_queue,
 	//install
 	al_install_keyboard();
 	al_install_mouse();
-	al_install_audio();
 
-	al_init_acodec_addon();
-	al_reserve_samples(1000);
 	al_init_font_addon();
 	al_init_ttf_addon();
 	al_init_primitives_addon();

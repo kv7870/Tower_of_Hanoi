@@ -48,58 +48,22 @@ int main() {
 	return 0;
 }
 
-/*void reset(int &numDisc, int &choice, int &numMove, Peg& A, Peg& C) {
-	
-	numDisc = 5;
-	choice = 0;
-	numMove = 0; 
-
-	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
-	ALLEGRO_COLOR blue = al_map_rgb(0, 255, 255);
-
-	for (Node* curr = C.getHead(); curr; curr = curr->next)
-		C.pop(0);
-
-	float x = 102.5, y = 400, r = 90;
-	for (int i = 0; i < numDisc; i++) {
-		Node* temp = new Node;
-		ALLEGRO_COLOR colour = (i % 2) ? yellow : blue;
-		temp->ID = numDisc - i;
-		temp->x = x;
-		temp->y = y;
-		temp->radius = r;
-		temp->colour = colour;
-
-		A.push(temp);
-
-		y -= 20;
-		r -= 10;
-	}
-}*/
 
 //level 4 minus requirement: computer solves in fewest moves using recursion 
-void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
+void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B, 
+	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	hanoi(numDisc, numMove, false, A, C, B, event_queue, font);
 
-	al_draw_text(font[BOLD], al_map_rgb(255,255, 255), 285, 100, 0, "DONE");
-	al_flip_display();
-	
-	bool done = false;
 	//wait for user to close window
-	while (!done) {
-		ALLEGRO_EVENT ev;
-		al_wait_for_event(event_queue, &ev);
-		if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-		{
-			done = true;
-		}
-	}
+	finishScreen(event_queue, font); 
 }
 
 //level 4 requirement: clickable walkthrough using recursion 
-void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-	draw(numDisc, numMove, false, A, C, B, event_queue, font);
+void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, 
+	ALLEGRO_FONT** font) {
+	//al_clear_to_color(al_map_rgb(0, 0, 0));
+	//draw(numDisc, numMove, false, A, C, B, event_queue, font);
+
 	float mx = 0, my = 0;
 	bool done = false;
 
@@ -112,6 +76,31 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 	bool refresh = true;
 	bool initial = true; 
 
+	changeNumDisc(numDisc, numMove, A, C, B, event_queue, font);
+
+	//solve recursively but one step at a time 
+	hanoi(numDisc, numMove, true, A, C, B, event_queue, font);
+
+	draw(numDisc, numMove, false, A, C, B, event_queue, font);
+
+	//wait for user to close window
+	finishScreen(event_queue, font);
+}
+
+
+void changeNumDisc(int& numDisc, int numMove, Peg& A, Peg& C, Peg& B,
+	ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
+
+	ALLEGRO_COLOR white = al_map_rgb(255, 255, 255);
+	ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
+	ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
+	ALLEGRO_COLOR green = al_map_rgb(0, 255, 0);
+	ALLEGRO_COLOR cyan = al_map_rgb(0, 255, 255);
+	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
+	bool done = false; 
+	bool refresh = true;
+	bool initial = true;
+	float mx = 0, my = 0;
 
 	while (!done) {
 
@@ -126,9 +115,9 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 			al_draw_filled_triangle(100, 15, 120, 15, 110, 35, red);
 			al_draw_filled_triangle(140, 35, 160, 35, 150, 15, green);
 
-			//draw solve button 
-			al_draw_filled_rounded_rectangle(480, 10, 580, 65, 10, 10, red);		
-			al_draw_text(font[BOLD], white, 490, 15, 0, "Solve");
+			//draw begin button 
+			al_draw_filled_rounded_rectangle(480, 10, 580, 65, 10, 10, red);
+			al_draw_text(font[BOLD], white, 490, 15, 0, "Begin");
 
 			al_flip_display();
 			refresh = false;
@@ -175,7 +164,7 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 						newnode->ID = 1;
 
 						//shift ID of other discs
-						for (Node* curr = A.getHead()->next; curr; curr=curr->next) {
+						for (Node* curr = A.getHead()->next; curr; curr = curr->next) {
 							(curr->ID)++;
 						}
 						A.push(newnode);
@@ -184,28 +173,13 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 				}
 			}
 
-			//start walkthrough if user clicks solve button 
+
+			//begin hanoi if user clicks begin
 			if ((mx >= 480 && mx <= 580) && (my >= 10 && my <= 50)) {
 				done = true;
-				al_draw_filled_rounded_rectangle(540, 10, 630, 50, 10, 10, al_map_rgb(128,128,128));
-				al_draw_text(font[REGULAR], black, 550, 15, 0, "Solve");
+				al_draw_filled_rounded_rectangle(540, 10, 630, 50, 10, 10, al_map_rgb(128, 128, 128));
+				al_draw_text(font[REGULAR], black, 550, 15, 0, "Begin");
 			}
 		}
 	}
-	//solve recursively but one step at a time 
-	hanoi(numDisc, numMove, true, A, C, B, event_queue, font);
-
-	draw(numDisc, numMove, false, A, C, B, event_queue, font);
-	al_draw_text(font[BOLD], al_map_rgb(255, 255, 255), 285, 100, 0, "DONE");
-	al_flip_display();
-	done = false; 
-
-	//wait for user to close window 
-	while (!done) {
-		ALLEGRO_EVENT ev;
-		al_wait_for_event(event_queue, &ev);
-		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-			done = true;
-	}
 }
-

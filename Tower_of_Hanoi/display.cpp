@@ -6,8 +6,6 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_acodec.h>
 #include "header.h"
 #include "class.h"
 using namespace std;
@@ -174,7 +172,22 @@ void draw(int numDisc, int &numMove, bool lvlFour, Peg s, Peg d, Peg i, ALLEGRO_
 	//show walkthrough instructions if level 4 version is running
 	if (lvlFour)
 		walkthrough(numDisc, s, d, event_queue, font);
-
-	//al_flip_display();
-	//al_rest(0.1);
 } 
+
+
+//inform user that tower has been solved 
+void finishScreen(ALLEGRO_EVENT_QUEUE *event_queue, ALLEGRO_FONT ** font) {
+	bool done = false;
+
+	al_draw_text(font[BOLD], al_map_rgb(255, 255, 255), 285, 100, 0, "DONE");
+	al_flip_display();
+
+	//wait for user to close window 
+	while (!done) {
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+			done = true;
+	}
+
+}
