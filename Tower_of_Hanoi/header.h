@@ -33,3 +33,4 @@ void walkthrough(int n, Peg s, Peg d, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_
 void reset(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C);
 bool getSelectedDisc(float mx, float my, Peg **s, Peg &A, Peg &C, Peg &B); 
 bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg* s, Peg** d); 
+void drawOptions(Peg* s, Peg A, Peg C, Peg B); 

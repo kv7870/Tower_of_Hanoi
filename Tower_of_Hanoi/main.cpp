@@ -64,6 +64,7 @@ int main() {
 }
 
 void reset(int &numDisc, int &choice, int &numMove, Peg& A, Peg& C) {
+	
 	numDisc = 5;
 	choice = 0;
 	numMove = 0; 
@@ -97,15 +98,25 @@ void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg
 	
 
 	al_draw_filled_rounded_rectangle(480, 10, 560, 50, 10, 10, al_map_rgb(255, 255, 255));
-	al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), 485, 15, 0, "Menu");
+	//al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), 485, 15, 0, "Menu");
+
+	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), 285, 100, 0, "DONE");
 	al_flip_display();
-	system("pause");
 	
-	reset(numDisc, choice, numMove, A, C);
-	C.printStack();
+	bool done = false;
+	while (!done) {
+		ALLEGRO_EVENT ev;
+		al_wait_for_event(event_queue, &ev);
+		if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+		{
+			done = true;
+		}
+	}
+
+	
+	//reset(numDisc, choice, numMove, A, C);
+
 	cout << endl;
-
-
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 
@@ -233,7 +244,6 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
 			done = true;
-			exit(0);
 		}
 
 		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
@@ -243,8 +253,9 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 				my = ev.mouse.y;
 
 				if (selected) {
-					if (chkValidMove(mx, my, A, C, B, s, &d)) {
-						cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
+					if (chkValidMove(mx, my, A, C, B, s, &d)) { 
+						//cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
+						//system("pause"); 
 						Move(numDisc, numMove, *s, *d);
 						selected = false;
 						s = NULL;
@@ -255,6 +266,8 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 				if (getSelectedDisc(mx, my, &s, A, C, B)) {
 					al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y, s->getHead()->x + s->getHead()->radius,
 						s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
+				
+					drawOptions(s, A, C, B);
 					refresh = true;
 					selected = true;
 				}
@@ -269,11 +282,21 @@ void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT
 			al_flip_display(); 
 			refresh = false; 
 		}
-
-		cout << "Selected: " << selected << endl;
-		cout << "s: " << s << endl; 
-		//system("pause");
 	}
+}
+
+void drawOptions(Peg *s, Peg A, Peg C, Peg B) {
+	if (s->pegID != A.pegID) 
+		if(!(A.getHead()) || A.getHead()->radius > s->getHead()->radius)
+			al_draw_filled_rectangle(A.cx - 50, 100, A.cx + 50, 150, al_map_rgb(255, 255, 255));
+
+	if (s->pegID != B.pegID)
+		if (!(B.getHead()) || B.getHead()->radius > s->getHead()->radius)
+			al_draw_filled_rectangle(B.cx - 50, 100, B.cx + 50, 150, al_map_rgb(255, 255, 255));
+
+	if (s->pegID != C.pegID)
+		if (!(C.getHead()) || C.getHead()->radius > s->getHead()->radius)
+			al_draw_filled_rectangle(C.cx - 50, 100, C.cx + 50, 150, al_map_rgb(255, 255, 255));
 }
 
 bool getSelectedDisc(float mx, float my, Peg **s, Peg &A, Peg &C, Peg &B) {
@@ -281,7 +304,6 @@ bool getSelectedDisc(float mx, float my, Peg **s, Peg &A, Peg &C, Peg &B) {
 		if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
 			if (my <= A.getHead()->y + 20 && my >= A.getHead()->y) {
 				*s = &A;
-				//system("pause");
 				return true;
 			}
 	}
@@ -315,33 +337,37 @@ bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg *s, Peg **d) {
 		al_draw_filled_rectangle(x, y, x + 5, y - 185, white);
 		al_draw_filled_rectangle((x + 2.5) - 95, y - 5, (x + 2.5) + 95, y, white);*/
 
-		if (my <= 425 && my >= 240) {                    
-			//verify destination != source                  
-			if (mx < s->cx - 2.5 || mx > s->cx + 2.5) {  
-				if (mx >= 100 && mx <= 105) {
-					if(A.getHead()==NULL || A.getHead()->ID > s->getHead()->ID) {  
-						*d = &A;    
-						return true; 
-					}
+	if (my <= 150 && my >= 100) {
+		//verify destination != source   
+		if (mx >= A.cx-50 && mx <= A.cx+50) {
+			if (s->pegID != A.pegID) {
+				if (A.getHead() == NULL || A.getHead()->ID > s->getHead()->ID) {
+					*d = &A;
+					return true;
 				}
+			}
+		}
 
-				else if (mx >= 320 && mx <= 325) { 
-					if (B.getHead() == NULL || B.getHead()->ID > s->getHead()->ID) {
-						*d = &B;     
-						return true;  
-					}
+		else if (mx >= B.cx - 50 && mx <= B.cx + 50) {
+			if (s->pegID != B.pegID) {
+				if (B.getHead() == NULL || B.getHead()->ID > s->getHead()->ID) {
+					*d = &B;
+					return true;
 				}
+			}
+		}
 
-				else if (mx >= 540 && mx <= 545) {   
-					if (C.getHead() == NULL||C.getHead()->ID > s->getHead()->ID) {
-						*d = &C;                
-						return true;     
-					}
+		else if (mx >= C.cx - 50 && mx <= C.cx + 50) {
+			if (s->pegID != C.pegID) {
+				if (C.getHead() == NULL || C.getHead()->ID > s->getHead()->ID) {
+					*d = &C;
+					return true;
 				}
 			}
 
 		}
+	}
 
-		return false; 
+	return false;
 }
 
