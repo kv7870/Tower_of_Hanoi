@@ -192,6 +192,7 @@
     <ClCompile Include="class.cpp" />
     <ClCompile Include="display.cpp" />
     <ClCompile Include="initiallization.cpp" />
+    <ClCompile Include="lvl4+.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

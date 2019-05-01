@@ -17,21 +17,20 @@ int main() {
 	ALLEGRO_TIMER* timer = NULL;
 	ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 	ALLEGRO_FONT* font[2] = { NULL };
-	initAllegro(&display, &timer, &event_queue, font);
+	initAllegro(&display, &event_queue, font);
 
 	int numDisc = 5;
+	//level 4-, 4, 4+ options 
 	int choice;
+	//track number of moves
 	int numMove = 0;
 
 	Peg A('A', 102.5, numDisc);
 	Peg B('B', 322.5);
 	Peg C('C', 542.5);
 
+	//display options 
 	titleScreen(numDisc, choice, numMove, A, C, B, event_queue, font);
-
-	//initTower(numDisc);
-
-	
 
 	switch (choice) {
 	case 1:
@@ -46,24 +45,10 @@ int main() {
 	default:
 		cout << "Invalid choice";
 	}
-
-	//hanoi(numDisc, A, C, B, event_queue);
-
-#if 0
-	A.printStack();
-	cout << endl;
-
-	B.printStack();
-	cout << endl;
-
-	C.printStack();
-	cout << endl;
-#endif
-
 	return 0;
 }
 
-void reset(int &numDisc, int &choice, int &numMove, Peg& A, Peg& C) {
+/*void reset(int &numDisc, int &choice, int &numMove, Peg& A, Peg& C) {
 	
 	numDisc = 5;
 	choice = 0;
@@ -90,20 +75,17 @@ void reset(int &numDisc, int &choice, int &numMove, Peg& A, Peg& C) {
 		y -= 20;
 		r -= 10;
 	}
-}
+}*/
 
+//level 4 minus requirement: computer solves in fewest moves using recursion 
 void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg& B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	hanoi(numDisc, numMove, false, A, C, B, event_queue, font);
 
-	
-
-	al_draw_filled_rounded_rectangle(480, 10, 560, 50, 10, 10, al_map_rgb(255, 255, 255));
-	//al_draw_text(font[REGULAR], al_map_rgb(0, 0, 0), 485, 15, 0, "Menu");
-
-	al_draw_text(font[BOLD], al_map_rgb(0, 0, 0), 285, 100, 0, "DONE");
+	al_draw_text(font[BOLD], al_map_rgb(255,255, 255), 285, 100, 0, "DONE");
 	al_flip_display();
 	
 	bool done = false;
+	//wait for user to close window
 	while (!done) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -112,17 +94,9 @@ void levelFourMinus(int& numDisc, int& choice, int& numMove, Peg& A, Peg& C, Peg
 			done = true;
 		}
 	}
-
-	
-	//reset(numDisc, choice, numMove, A, C);
-
-	cout << endl;
-
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-
-	titleScreen(numDisc, choice, numMove, A, C, B, event_queue, font);
 }
 
+//level 4 requirement: clickable walkthrough using recursion 
 void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	draw(numDisc, numMove, false, A, C, B, event_queue, font);
@@ -133,7 +107,7 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 	ALLEGRO_COLOR black = al_map_rgb(0, 0, 0);
 	ALLEGRO_COLOR red = al_map_rgb(255, 0, 0);
 	ALLEGRO_COLOR green = al_map_rgb(0, 255, 0);
-	ALLEGRO_COLOR blue = al_map_rgb(0, 255, 255);
+	ALLEGRO_COLOR cyan = al_map_rgb(0, 255, 255);
 	ALLEGRO_COLOR yellow = al_map_rgb(255, 255, 0);
 	bool refresh = true;
 	bool initial = true; 
@@ -141,36 +115,29 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 
 	while (!done) {
 
+		//update display if user changes # of disks 
 		if (refresh) {
-
 			draw(numDisc, numMove, false, A, C, B, event_queue, font);
 
+			//draw buttons to adjust # of disks 
 			al_draw_textf(font[REGULAR], white, 5, 5, 0, "Discs: %d", numDisc);
 			al_draw_filled_rectangle(95, 10, 125, 40, white);
 			al_draw_filled_rectangle(135, 10, 165, 40, white);
-
 			al_draw_filled_triangle(100, 15, 120, 15, 110, 35, red);
 			al_draw_filled_triangle(140, 35, 160, 35, 150, 15, green);
 
-			al_draw_filled_rounded_rectangle(430, 10, 520, 50, 10, 10, white);
-			al_draw_text(font[REGULAR], black, 443, 15, 0, "Menu");
-
-			al_draw_filled_rounded_rectangle(540, 10, 630, 50, 10, 10, white);		
-			al_draw_text(font[REGULAR], black, 553, 15, 0, "Solve");
-
+			//draw solve button 
+			al_draw_filled_rounded_rectangle(480, 10, 580, 65, 10, 10, red);		
+			al_draw_text(font[BOLD], white, 490, 15, 0, "Solve");
 
 			al_flip_display();
-
-
-
 			refresh = false;
 		}
 
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
-
-
+		//user presses mouse 1 
 		if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 		{
 			if (ev.mouse.button & 1) {
@@ -179,12 +146,14 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 			}
 
 			if (my >= 10 && my <= 40) {
+				//user clicks button that decreases # of discs 
 				if (mx >= 95 && mx <= 125) {
 					if (numDisc > 1) {
 						numDisc--;
 
 						A.pop(initial);
 
+						//shift ID of other discs 
 						for (Node* curr = A.getHead()->next; curr; curr = curr->next) {
 							(curr->ID)--;
 						}
@@ -192,182 +161,51 @@ void levelFour(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUE
 					}
 
 				}
+				//user clicks button that increases # of discs 
 				else if (mx >= 135 && mx <= 165) {
 					if (numDisc < MAX_DISC) {
 						numDisc++;
+
+						//create new disc
 						Node* newnode = new Node;
 						newnode->x = A.cx;
 						newnode->y = A.topY;
 						newnode->radius = A.getHead()->radius - 10;
-						newnode->colour = (A.size % 2) ? yellow : blue;
+						newnode->colour = (A.size % 2) ? yellow : cyan;
 						newnode->ID = 1;
 
+						//shift ID of other discs
 						for (Node* curr = A.getHead()->next; curr; curr=curr->next) {
 							(curr->ID)++;
 						}
-
 						A.push(newnode);
 						refresh = true;
 					}
 				}
 			}
 
-			if ((mx >= 540 && mx <= 630) && (my >= 10 && my <= 50)) {
+			//start walkthrough if user clicks solve button 
+			if ((mx >= 480 && mx <= 580) && (my >= 10 && my <= 50)) {
 				done = true;
 				al_draw_filled_rounded_rectangle(540, 10, 630, 50, 10, 10, al_map_rgb(128,128,128));
 				al_draw_text(font[REGULAR], black, 550, 15, 0, "Solve");
 			}
-			
 		}
-
-
 	}
-	
+	//solve recursively but one step at a time 
 	hanoi(numDisc, numMove, true, A, C, B, event_queue, font);
-}
 
-void levelFourPlus(int& numDisc, int numMove, Peg A, Peg C, Peg B, ALLEGRO_EVENT_QUEUE* event_queue, ALLEGRO_FONT** font) {
-	bool done = false;
-	bool refresh = true; 
-	float mx = 0, my = 0;
-	bool selected = false; 
-	Peg* s = NULL, * d = NULL; 
+	draw(numDisc, numMove, false, A, C, B, event_queue, font);
+	al_draw_text(font[BOLD], al_map_rgb(255, 255, 255), 285, 100, 0, "DONE");
+	al_flip_display();
+	done = false; 
 
+	//wait for user to close window 
 	while (!done) {
-		if (refresh) {
-			draw(numDisc, numMove, false, A, C, B, event_queue, font);
-		}
-
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-
 		if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-		{
 			done = true;
-		}
-
-		else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
-		{
-			if (ev.mouse.button & 1) {
-				mx = ev.mouse.x;
-				my = ev.mouse.y;
-
-				if (selected) {
-					if (chkValidMove(mx, my, A, C, B, s, &d)) { 
-						//cout << "Source: " << s->pegID << endl << "Destination: " << d->pegID << endl; 
-						//system("pause"); 
-						Move(numDisc, numMove, *s, *d);
-						selected = false;
-						s = NULL;
-						d = NULL;
-					}
-				}
-
-				if (getSelectedDisc(mx, my, &s, A, C, B)) {
-					al_draw_filled_rounded_rectangle(s->getHead()->x - s->getHead()->radius, s->getHead()->y, s->getHead()->x + s->getHead()->radius,
-						s->getHead()->y + 20, 10, 10, al_map_rgb(0, 255, 0));
-				
-					drawOptions(s, A, C, B);
-					refresh = true;
-					selected = true;
-				}
-				else {
-					mx = 0;
-					my = 0;
-				}
-			}
-		}
-
-		if (refresh) { 
-			al_flip_display(); 
-			refresh = false; 
-		}
 	}
-}
-
-void drawOptions(Peg *s, Peg A, Peg C, Peg B) {
-	if (s->pegID != A.pegID) 
-		if(!(A.getHead()) || A.getHead()->radius > s->getHead()->radius)
-			al_draw_filled_rectangle(A.cx - 50, 100, A.cx + 50, 150, al_map_rgb(255, 255, 255));
-
-	if (s->pegID != B.pegID)
-		if (!(B.getHead()) || B.getHead()->radius > s->getHead()->radius)
-			al_draw_filled_rectangle(B.cx - 50, 100, B.cx + 50, 150, al_map_rgb(255, 255, 255));
-
-	if (s->pegID != C.pegID)
-		if (!(C.getHead()) || C.getHead()->radius > s->getHead()->radius)
-			al_draw_filled_rectangle(C.cx - 50, 100, C.cx + 50, 150, al_map_rgb(255, 255, 255));
-}
-
-bool getSelectedDisc(float mx, float my, Peg **s, Peg &A, Peg &C, Peg &B) {
-	if (A.getHead()) 
-		if (mx >= A.cx - A.getHead()->radius && mx <= A.cx + A.getHead()->radius) {
-			if (my <= A.getHead()->y + 20 && my >= A.getHead()->y) {
-				*s = &A;
-				return true;
-			}
-	}
-
-	if (B.getHead()) {
-		if (mx >= B.cx - B.getHead()->radius && mx <= B.cx + B.getHead()->radius) {
-			if (my <= B.getHead()->y + 20 && my >= B.getHead()->y)
-				if (B.getHead()) {
-					*s = &B;
-					return true;
-				}
-		}
-	}
-
-	if(C.getHead()) {
-		if (mx >= C.cx - C.getHead()->radius && mx <= C.cx + C.getHead()->radius) {
-			if (my <= C.getHead()->y + 20 && my >= C.getHead()->y)
-				if (C.getHead()) {
-					*s = &C;
-					return true;
-				}
-		}
-	}
-
-	return false; 
-}
-
-
-bool chkValidMove(float mx, float my, Peg A, Peg C, Peg B, Peg *s, Peg **d) {
-	/*for (int i = 0, x = 100, y = 425; i < 3; i++, x += 220) {
-		al_draw_filled_rectangle(x, y, x + 5, y - 185, white);
-		al_draw_filled_rectangle((x + 2.5) - 95, y - 5, (x + 2.5) + 95, y, white);*/
-
-	if (my <= 150 && my >= 100) {
-		//verify destination != source   
-		if (mx >= A.cx-50 && mx <= A.cx+50) {
-			if (s->pegID != A.pegID) {
-				if (A.getHead() == NULL || A.getHead()->ID > s->getHead()->ID) {
-					*d = &A;
-					return true;
-				}
-			}
-		}
-
-		else if (mx >= B.cx - 50 && mx <= B.cx + 50) {
-			if (s->pegID != B.pegID) {
-				if (B.getHead() == NULL || B.getHead()->ID > s->getHead()->ID) {
-					*d = &B;
-					return true;
-				}
-			}
-		}
-
-		else if (mx >= C.cx - 50 && mx <= C.cx + 50) {
-			if (s->pegID != C.pegID) {
-				if (C.getHead() == NULL || C.getHead()->ID > s->getHead()->ID) {
-					*d = &C;
-					return true;
-				}
-			}
-
-		}
-	}
-
-	return false;
 }
 
